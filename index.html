@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <title>Please Be My Valentine 💘</title>
 
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
   <style>
     body {
       margin: 0;
@@ -13,52 +16,98 @@
       align-items: center;
       flex-direction: column;
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      background: linear-gradient(135deg, #ffe6eb, #ffd6e0);
       overflow: hidden;
+      position: relative;
+    }
+
+    /* Floating hearts */
+    .heart {
+      position: fixed;
+      color: rgba(255, 0, 80, 0.4);
+      animation: floatUp 8s linear infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) scale(1); opacity: 1; }
+      100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+    }
+
+    /* Stickers */
+    .sticker {
+      position: fixed;
+      z-index: 5;
+      pointer-events: none;
+      animation: floatSticker 3s ease-in-out infinite;
+    }
+
+    .cry-sticker {
+      top: 20px;
+      left: 20px;
+      width: 140px;
+    }
+
+    .teddy-sticker {
+      bottom: 20px;
+      right: 20px;
+      width: 190px;
+    }
+
+    @keyframes floatSticker {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
 
     h1 {
-      color: white;
-      margin-bottom: 30px;
+      color: #d6003c;
+      margin-bottom: 20px;
       text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 46px;
+      text-shadow: 1px 1px 8px rgba(255, 0, 80, 0.2);
+      z-index: 10;
+      position: relative;
     }
 
     .buttons {
       display: flex;
-      gap: 20px;
+      gap: 25px;
+      z-index: 10;
+      position: relative;
     }
 
     button {
       border: none;
-      border-radius: 30px;
+      border-radius: 50px;
       cursor: pointer;
-      font-size: 18px;
-      padding: 15px 30px;
+      font-size: 26px;
+      padding: 22px 60px;
+      min-width: 200px;
       transition: all 0.3s ease;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
     }
 
+    /* YES – light pink */
     #yesBtn {
-      background-color: #4CAF50;
-      color: white;
+      background: linear-gradient(135deg, #ffb6c1, #ff8fab);
+      color: #7a0026;
+      transform: scale(1.1);
     }
 
+    /* NO – dark grey */
     #noBtn {
-      background-color: #ff4d4d;
-      color: white;
-    }
-
-    .message {
-      margin-top: 25px;
-      font-size: 22px;
-      color: white;
-      height: 30px;
+      background: linear-gradient(135deg, #3a3a3a, #1f1f1f);
+      color: #f1f1f1;
     }
 
     .final {
       position: fixed;
       inset: 0;
       border-radius: 0;
-      font-size: 50px;
+      font-size: 55px;
       z-index: 999;
     }
   </style>
@@ -66,19 +115,38 @@
 
 <body>
 
-  <h1>Divya my love, will you be my Valentine? 💖</h1>
+  <!-- Floating hearts -->
+  <script>
+    for (let i = 0; i < 25; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.textContent = '❤️';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.fontSize = 16 + Math.random() * 30 + 'px';
+      heart.style.animationDuration = 5 + Math.random() * 5 + 's';
+      document.body.appendChild(heart);
+    }
+  </script>
+
+  <!-- Stickers -->
+  <img class="sticker cry-sticker"
+       src="https://media.giphy.com/media/OPU6wzx8JrHna/giphy.gif"
+       alt="crying sticker">
+
+  <img class="sticker teddy-sticker"
+       src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif"
+       alt="teddy hug sticker">
+
+  <h1>Divya my love,<br>will you be my Valentine? 💖</h1>
 
   <div class="buttons">
     <button id="yesBtn">Ha 💘</button>
     <button id="noBtn">Nahi 🙃</button>
   </div>
 
-  <div class="message" id="message"></div>
-
   <script>
     const noBtn = document.getElementById('noBtn');
     const yesBtn = document.getElementById('yesBtn');
-    const msg = document.getElementById('message');
 
     const messages = [
       "Areeeee pakka? 🤔",
@@ -89,36 +157,54 @@
     ];
 
     let clickCount = 0;
-    let scale = 1;
+    let scale = 1.1;
 
     noBtn.addEventListener('click', () => {
-      msg.textContent = messages[clickCount % messages.length];
+      // Change NO button text
+      noBtn.textContent = messages[clickCount % messages.length];
 
-      scale += 0.4;
+      // Grow YES button
+      scale += 0.45;
       yesBtn.style.transform = `scale(${scale})`;
 
       clickCount++;
 
       if (scale > 5) {
         yesBtn.classList.add('final');
-        yesBtn.textContent = "Haaa 💖";
+        yesBtn.textContent = "HAAA 💖";
         noBtn.style.display = 'none';
       }
     });
 
     yesBtn.addEventListener('click', () => {
       document.body.innerHTML = `
-        <h1 style="font-size:48px; color:white; text-align:center;">
-  YAYYY 💖<br>
-  You’re my Valentine now Divya 😘
-</h1>
+        <h1 style="
+          font-size:50px;
+          color:#d6003c;
+          text-align:center;
+          font-family:'Playfair Display', serif;
+          font-style:italic;
+        ">
+          YAYYY 💖<br>
+          You’re my Valentine now Divya 😘
+        </h1>
+
+        <img src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif"
+             style="width:220px; margin-top:20px;">
+
+        <div style="
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          font-size: 14px;
+          color: rgba(214,0,60,0.7);
+          font-style: italic;
+        ">
+          — Prashant · 4 Feb 2026
+        </div>
       `;
     });
   </script>
 
 </body>
-
 </html>
-
-
-
