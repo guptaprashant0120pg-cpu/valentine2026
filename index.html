@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <title>Please Be My Valentine 💘</title>
 
-  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
   <style>
@@ -24,7 +23,7 @@
     /* Floating hearts */
     .heart {
       position: fixed;
-      color: rgba(255, 0, 80, 0.4);
+      color: rgba(255, 0, 80, 0.35);
       animation: floatUp 8s linear infinite;
       pointer-events: none;
       z-index: 1;
@@ -35,18 +34,34 @@
       100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
     }
 
-    /* Stickers (shared base) */
-    .sticker {
+    /* Teddy wrapper */
+    .teddy-wrap {
       position: relative;
-      width: 180px;
       margin-bottom: 10px;
       z-index: 6;
+    }
+
+    .teddy {
+      width: 200px;
       animation: floatSticker 3s ease-in-out infinite;
     }
 
     @keyframes floatSticker {
       0%,100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
+    }
+
+    /* Crying effect */
+    .sad {
+      opacity: 0.75;
+    }
+
+    .tears {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 26px;
     }
 
     h1 {
@@ -56,7 +71,6 @@
       font-family: 'Playfair Display', serif;
       font-style: italic;
       font-size: 46px;
-      text-shadow: 1px 1px 8px rgba(255, 0, 80, 0.2);
       z-index: 10;
     }
 
@@ -77,14 +91,14 @@
       box-shadow: 0 10px 20px rgba(0,0,0,0.15);
     }
 
-    /* YES – light pink */
+    /* YES */
     #yesBtn {
       background: linear-gradient(135deg, #ffb6c1, #ff8fab);
       color: #7a0026;
       transform: scale(1.1);
     }
 
-    /* NO – dark grey */
+    /* NO */
     #noBtn {
       background: linear-gradient(135deg, #3a3a3a, #1f1f1f);
       color: #f1f1f1;
@@ -104,31 +118,33 @@
 
   <!-- Floating hearts -->
   <script>
-    for (let i = 0; i < 25; i++) {
+    for (let i = 0; i < 22; i++) {
       const heart = document.createElement('div');
       heart.className = 'heart';
       heart.textContent = '❤️';
       heart.style.left = Math.random() * 100 + 'vw';
-      heart.style.fontSize = 16 + Math.random() * 30 + 'px';
+      heart.style.fontSize = 14 + Math.random() * 26 + 'px';
       heart.style.animationDuration = 5 + Math.random() * 5 + 's';
       document.body.appendChild(heart);
     }
   </script>
 
-  <!-- 😭 CRYING STICKER (VISIBLE FIRST) -->
-  <img
-    id="crySticker"
-    class="sticker"
-    src="https://media.giphy.com/media/OPU6wzx8JrHna/giphy.gif"
-    alt="crying sticker">
+  <!-- 🧸 SAD TEDDY (FIRST SCREEN) -->
+  <div id="sadTeddy" class="teddy-wrap">
+    <img
+      class="teddy sad"
+      src="teddy.png"
+      alt="sad teddy">
+    <div class="tears">😭</div>
+  </div>
 
-  <!-- 🧸 HUG STICKER (HIDDEN INITIALLY) -->
-  <img
-    id="hugSticker"
-    class="sticker"
-    src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif"
-    alt="hug sticker"
-    style="display:none;">
+  <!-- 🧸 HAPPY TEDDY (HIDDEN INITIALLY) -->
+  <div id="happyTeddy" class="teddy-wrap" style="display:none;">
+    <img
+      class="teddy"
+      src="teddy.png"
+      alt="happy teddy">
+  </div>
 
   <h1>Divya my love,<br>will you be my Valentine? 💖</h1>
 
@@ -140,8 +156,8 @@
   <script>
     const noBtn = document.getElementById('noBtn');
     const yesBtn = document.getElementById('yesBtn');
-    const crySticker = document.getElementById('crySticker');
-    const hugSticker = document.getElementById('hugSticker');
+    const sadTeddy = document.getElementById('sadTeddy');
+    const happyTeddy = document.getElementById('happyTeddy');
 
     const messages = [
       "Areeeee pakka? 🤔",
@@ -168,12 +184,14 @@
     });
 
     yesBtn.addEventListener('click', () => {
-      // Swap stickers
-      crySticker.style.display = 'none';
-      hugSticker.style.display = 'block';
+      sadTeddy.style.display = 'none';
+      happyTeddy.style.display = 'block';
 
       document.body.innerHTML = `
-        <img src="${hugSticker.src}" style="width:220px; animation: floatSticker 3s ease-in-out infinite;">
+        <div style="margin-bottom:15px;">
+          <img src="teddy.png" style="width:220px;">
+        </div>
+
         <h1 style="
           font-size:50px;
           color:#d6003c;
