@@ -35,24 +35,13 @@
       100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
     }
 
-    /* Stickers */
+    /* Stickers (shared base) */
     .sticker {
-      position: fixed;
-      z-index: 5;
-      pointer-events: none;
+      position: relative;
+      width: 180px;
+      margin-bottom: 10px;
+      z-index: 6;
       animation: floatSticker 3s ease-in-out infinite;
-    }
-
-    .cry-sticker {
-      top: 20px;
-      left: 20px;
-      width: 140px;
-    }
-
-    .teddy-sticker {
-      bottom: 20px;
-      right: 20px;
-      width: 190px;
     }
 
     @keyframes floatSticker {
@@ -69,14 +58,12 @@
       font-size: 46px;
       text-shadow: 1px 1px 8px rgba(255, 0, 80, 0.2);
       z-index: 10;
-      position: relative;
     }
 
     .buttons {
       display: flex;
       gap: 25px;
       z-index: 10;
-      position: relative;
     }
 
     button {
@@ -128,14 +115,20 @@
     }
   </script>
 
-  <!-- Stickers -->
-  <img class="sticker cry-sticker"
-       src="https://media.giphy.com/media/OPU6wzx8JrHna/giphy.gif"
-       alt="crying sticker">
+  <!-- 😭 CRYING STICKER (VISIBLE FIRST) -->
+  <img
+    id="crySticker"
+    class="sticker"
+    src="https://media.giphy.com/media/OPU6wzx8JrHna/giphy.gif"
+    alt="crying sticker">
 
-  <img class="sticker teddy-sticker"
-       src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif"
-       alt="teddy hug sticker">
+  <!-- 🧸 HUG STICKER (HIDDEN INITIALLY) -->
+  <img
+    id="hugSticker"
+    class="sticker"
+    src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif"
+    alt="hug sticker"
+    style="display:none;">
 
   <h1>Divya my love,<br>will you be my Valentine? 💖</h1>
 
@@ -147,6 +140,8 @@
   <script>
     const noBtn = document.getElementById('noBtn');
     const yesBtn = document.getElementById('yesBtn');
+    const crySticker = document.getElementById('crySticker');
+    const hugSticker = document.getElementById('hugSticker');
 
     const messages = [
       "Areeeee pakka? 🤔",
@@ -160,13 +155,9 @@
     let scale = 1.1;
 
     noBtn.addEventListener('click', () => {
-      // Change NO button text
       noBtn.textContent = messages[clickCount % messages.length];
-
-      // Grow YES button
       scale += 0.45;
       yesBtn.style.transform = `scale(${scale})`;
-
       clickCount++;
 
       if (scale > 5) {
@@ -177,7 +168,12 @@
     });
 
     yesBtn.addEventListener('click', () => {
+      // Swap stickers
+      crySticker.style.display = 'none';
+      hugSticker.style.display = 'block';
+
       document.body.innerHTML = `
+        <img src="${hugSticker.src}" style="width:220px; animation: floatSticker 3s ease-in-out infinite;">
         <h1 style="
           font-size:50px;
           color:#d6003c;
@@ -188,9 +184,6 @@
           YAYYY 💖<br>
           You’re my Valentine now Divya 😘
         </h1>
-
-        <img src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif"
-             style="width:220px; margin-top:20px;">
 
         <div style="
           position: fixed;
